@@ -1,0 +1,2 @@
+rootProject.name='KPZ_MPK'
+include ':app'
