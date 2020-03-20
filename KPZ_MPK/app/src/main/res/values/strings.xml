@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KPZ_MPK</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
