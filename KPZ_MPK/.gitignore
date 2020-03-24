@@ -51,3 +51,6 @@ output.json
 #NDK
 obj/
 .externalNativeBuild
+
+#API
+/app/src/debug/res/values/google_maps_api.xml
