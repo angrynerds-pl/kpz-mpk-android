@@ -1,8 +1,14 @@
 package com.example.kpz_mpk.app
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.kpz_mpk.R
 import com.example.kpz_mpk.app.core.BaseActivity
@@ -12,9 +18,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.activity_map.*
 
 
 class MapActivity : BaseActivity(), OnMapReadyCallback,  GoogleMap.OnMarkerClickListener {
@@ -28,16 +33,70 @@ class MapActivity : BaseActivity(), OnMapReadyCallback,  GoogleMap.OnMarkerClick
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var centerLatLang: LatLng
+    private lateinit var centerText: TextView
+    private  lateinit var reportButton: Button
+    private  lateinit var confirmButton: Button
+    private  lateinit var cancelButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        centerText = findViewById<TextView>(R.id.centerTextView)
+        centerText.visibility = View.INVISIBLE
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        reportButton = findViewById<Button>(R.id.report_button_id)
+        confirmButton = findViewById<Button>(R.id.confirm_button_id)
+        cancelButton = findViewById<Button>(R.id.cancel_button_id)
+
+
+        reportButton?.setOnClickListener() {
+            centerText.visibility = View.VISIBLE
+
+            reportButton.visibility = View.INVISIBLE
+
+            confirmButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
+
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f), 1000, null)
+            mMap.uiSettings.isZoomGesturesEnabled = false;
+        }
+
+
+        confirmButton?.setOnClickListener() {
+
+            mMap.addMarker(MarkerOptions()
+                .position(mMap.cameraPosition.target)
+                .title("Accident"))
+
+            centerText.visibility = View.INVISIBLE
+
+            reportButton.visibility = View.VISIBLE
+
+            confirmButton.visibility = View.INVISIBLE
+            cancelButton.visibility = View.INVISIBLE
+        }
+
+
+        cancelButton?.setOnClickListener() {
+
+            centerText.visibility = View.INVISIBLE
+
+            reportButton.visibility = View.VISIBLE
+
+            confirmButton.visibility = View.INVISIBLE
+            cancelButton.visibility = View.INVISIBLE
+
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(14f), 1000, null)
+            mMap.uiSettings.isZoomGesturesEnabled = true;
+        }
     }
 
 
@@ -45,6 +104,16 @@ class MapActivity : BaseActivity(), OnMapReadyCallback,  GoogleMap.OnMarkerClick
         mMap = googleMap
         setUpMap()
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
         mMap.isMyLocationEnabled = true
 
         // Move the camera to a default location - Wroclaw's Main Square
@@ -68,6 +137,11 @@ class MapActivity : BaseActivity(), OnMapReadyCallback,  GoogleMap.OnMarkerClick
             } else {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, defaultZoom))
             }
+        }
+
+        mMap.setOnCameraMoveListener {
+            centerLatLang = mMap.cameraPosition.target
+            centerText.text = centerLatLang.toString()
         }
 
         mMap.setOnMarkerClickListener(this)

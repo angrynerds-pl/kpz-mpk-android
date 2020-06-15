@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.MapActivity">
+    tools:context=".app.MapActivity" >
 
-</fragment>
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".app.MapActivity"
+        tools:layout="@layout/activity_map" />
 
+    <View
+        android:id="@+id/centerShim"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/report_button_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="0dp"
+        android:background="#FFFFFF"
+        android:text="@string/report_string"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/confirm_button_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/centerShim"
+        android:background="#226A00"
+        android:text="@string/confirm_string"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/cancel_button_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/centerShim"
+        android:background="#830000"
+        android:text="@string/cancel_string"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/centerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:drawableBottom="@android:drawable/arrow_down_float"
+        android:text="@string/center_location_text"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+    />
+
+
+
+
+</RelativeLayout>
 
 
 

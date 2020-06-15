@@ -2,4 +2,9 @@
     <string name="app_name">KPZ_MPK</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_maps">Map</string>
+    <string name="report_string">REPORT</string>
+    <string name="confirm_string">CONFIRM</string>
+    <string name="cancel_string">CANCEL</string>
+    <string name="title_activity_report_map">Map</string>
+    <string name="center_location_text">0.0</string>
 </resources>
